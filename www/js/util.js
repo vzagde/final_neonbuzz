@@ -906,7 +906,7 @@ function load_buzzs_offers(type, selector) {
             });
             myApp.initImagesLazyLoad($('[data-page="' + type + 's' + '"]'));
         } else {
-            var html = '<p>Feed not found.</p>';
+            var html = '<h4> Content not found.</h4>';
             $(selector).html(html);
         }
     }).fail(function(err) {
@@ -1046,7 +1046,7 @@ function load_feeds() {
 			
             myApp.initImagesLazyLoad($('[data-page="feeds"]'));
         } else {
-            var html = '<p>Feed not found.</p>';
+            var html = '<h4> Content not found.</h4>';
             $('#feeds-container').html(html);
         }
     }).fail(function(err) {
