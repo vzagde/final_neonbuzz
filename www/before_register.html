@@ -1,0 +1,46 @@
+<div data-page="before_register" class="page">
+
+  <div class="navbar header">
+    <div class="navbar-inner">
+	  <div class="left"><a href="#" class="back link icon-only"><i class="material-icons" style="color:#000;">arrow_back</i></a></div>
+      <div class="center title">Register</div>
+	  <img src="img/header-right.png" class="right" alt="" />
+      <!-- <div class="right"><a href="#" class="open-panel link icon-only"><i class="icon icon-bars"></i></a></div> -->
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="content-block-title">Might We Ask?</div>
+    <form>
+      <div class="list-block">
+          <ul>
+            <!-- Single radio input -->
+            <li>
+              <label class="label-radio item-content">
+                <!-- Checked by default -->
+                <input type="radio" name="before_register-radio" onchange="goto_register('shopper')" value="Shopper" >
+                <div class="item-media">
+                  <i class="icon icon-form-radio"></i>
+                </div>
+                <div class="item-inner">
+                  <div class="item-title">Shopper</div>
+                </div>
+              </label>
+            </li>
+            <!-- Another radio input -->
+            <li>
+              <label class="label-radio item-content">
+                <input type="radio" name="before_register-radio" onchange="goto_register('business')" value="Business" >
+                <div class="item-media">
+                  <i class="icon icon-form-radio"></i>
+                </div>
+                <div class="item-inner">
+                  <div class="item-title">Business</div>
+                </div>
+              </label>
+            </li>
+          </ul>
+        </div>
+    </form>
+  </div>
+</div>
