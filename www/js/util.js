@@ -147,7 +147,8 @@ function cover_image_onSuccess_file(res) {
             .done(function(res) {
                 console.log("cover image ok callback: "+j2s(res));
                 myApp.alert('Cover image updated Successfully');
-                mainView.router.refreshPage();
+                // mainView.router.refreshPage();
+                $('.cover_image').attr('src', image_url+uploaded_image);
             })
             .fail(function(err) {
                 console.log("cover image ok callback: error: "+j2s(err));
@@ -427,7 +428,7 @@ function register_business() {
     // var gender = $('.business_register-gender:checked').val();
     var gender = $('input[name=business_register-gender]:checked').val();
     var business_name = $('#business_register-buissness').val().trim();
-    var category = $('#business_register-category').val().trim();
+    var category = $('#business_register-category').val();
     var business_category = '';
     // var profile_image = $('#shopper_register-profile_image').val().trim();
     var profile_image = image_from_device.trim();
@@ -974,7 +975,41 @@ function load_buzz_offer(type, id) {
     }).always();
 }
 
+function load_notification_count() {
+    $.ajax({
+        url: base_url+'/get_chat_notification_count',
+        type: 'POST',
+        dataType: 'json',
+        crossDomain: true,
+        data: {
+            user_id: token
+        },
+    })
+    .done(function(res) {
+        console.log("success: "+j2s(res));
+        if (res.status=='success') {
+            var notification = res.data.notification[0].notification_count;
+            var chat = res.data.chat[0].chat_count;
+            console.log('notification: '+notification);
+            console.log('chat: '+chat);
+            $('.chats').find('span').text(chat);
+            $('.notifications').find('span').text(notification);
+        }
+    })
+    .fail(function(err) {
+        console.log("error: "+j2s(err));
+    })
+    .always(function() {
+        console.log("complete");
+    });
+    
+}
+
 function load_feeds() {
+    load_notification_count();
+    setInterval(function() {
+        load_notification_count();
+    }, 5000);
     myApp.showIndicator();
     $.ajax({
         url: base_url + '/feeds',
@@ -1046,7 +1081,7 @@ function load_feeds() {
 			
             myApp.initImagesLazyLoad($('[data-page="feeds"]'));
         } else {
-            var html = '<h4> Content not found.</h4>';
+            var html = '<h4> Feeds not found.</h4>';
             $('#feeds-container').html(html);
         }
     }).fail(function(err) {
@@ -1297,6 +1332,43 @@ function add_comment_offer() {
 }
 
 function add_comment(type, type_id, comment) {
+    var pofile_image;
+    var like_link = '';
+    if (user_data.image.indexOf('http') != -1) {
+        profile_image = user_data.image;
+    } else {
+        profile_image = image_url + user_data.image;
+    }
+
+    var date = new Date();
+
+    var messageText = comment;
+
+    // Empty messagebar
+    // myMessagebar.clear()
+
+    // Random message type
+    // var messageType = (['sent', 'received'])[Math.round(Math.random())];
+    var messageType = 'received';
+
+    // Avatar and name for received message
+    var avatar, name;
+    avatar = profile_image;
+    name = user_data.first_name;
+
+    myComment.addMessage({
+        // Message text
+        text: messageText,
+        // Random message type
+        type: messageType,
+        // Avatar and name:
+        avatar: avatar,
+        name: name,
+        // Day
+        day: get_day(date),
+        time: date.getHours() + ':' + date.getMinutes(),
+    });
+
     $.ajax({
         url: base_url + '/add_comment',
         type: 'POST',
@@ -1525,6 +1597,30 @@ function load_notification() {
 
 function come_form_notification(cat, id, type) {
     console.log(cat+id+type);
+    $.ajax({
+        url: base_url+'/read_notification',
+        type: 'POST',
+        dataType: 'json',
+        crossDomain: true,
+        data: {
+            user_id: token,
+            category: cat,
+            category_id: id,
+        },
+    })
+    .done(function(res) {
+        console.log("success: "+j2s(res));
+        if (res.status=='success') {
+            console.log('working');
+        }
+    })
+    .fail(function(err) {
+        console.log("error: "+j2s(err));
+    })
+    .always(function() {
+        console.log("complete");
+    });
+    
     switch (cat) {
         case 'feed':
             mainView.router.load({
@@ -1695,6 +1791,15 @@ function load_shopper_profile(user_id) {
                 });
 
                 $('.p_name').text(res.data.first_name);
+
+                var feeds = '';
+                $.each(res.feeds, function(index, val) {
+                    feeds+= 
+                    '<div class="own_feed">'+
+                        '<a href="feed.html?id='+val.id+'"><img src="'+image_url+val.image+'" class="wdh" alt="" /></a>'+
+                    '</div>';
+                });
+                $('.profile-feed-container').html(feeds);
             }
         })
         .fail(function(err) {
@@ -1846,13 +1951,22 @@ function load_business_profile(user_id) {
                 },
                 series: series,
             });
+
+            var feeds = '';
+            $.each(res.feeds, function(index, val) {
+                feeds+= 
+                '<div class="own_feed">'+
+                    '<a href="feed.html?id='+val.id+'"><img src="'+image_url+val.image+'" class="wdh" alt="" /></a>'+
+                '</div>';
+            });
+            $('.profile-feed-container').html(feeds);
         }
     })
     .fail(function(err) {
-    console.log("error: " + j2s(err));
+        console.log("error: " + j2s(err));
     })
     .always(function() {
-    console.log("complete");
+        console.log("complete");
     });
 }
 
@@ -2123,6 +2237,7 @@ function load_chats() {
         if (res.status=='success') {
             var html = '';
             $.each(res.data.shopper, function(index, val) {
+                val = val[0];
                 var profile_link = '';
                 var profile_image = '';
 
@@ -2132,11 +2247,11 @@ function load_chats() {
                     profile_image = image_url + val.image;
                 }
 
-                if (val.user_type == 'Shopper') {
-                    profile_link = 'profile_shopper.html?id=' + val.id;
-                } else {
-                    profile_link = 'profile_business.html?id=' + val.id;
-                }
+                // if (val.user_type == 'Shopper') {
+                //     profile_link = 'profile_shopper.html?id=' + val.id;
+                // } else {
+                //     profile_link = 'profile_business.html?id=' + val.id;
+                // }
 
                 html += 
                 '<li class="">'+
@@ -2155,7 +2270,9 @@ function load_chats() {
             $('#shopper_chat_list').html(html);
 
             html = '';
+            val = null;
             $.each(res.data.business, function(index, val) {
+                val = val[0];
                 var profile_link = '';
                 var profile_image = '';
 
@@ -2165,11 +2282,11 @@ function load_chats() {
                     profile_image = image_url + val.image;
                 }
 
-                if (val.user_type == 'Shopper') {
-                    profile_link = 'profile_shopper.html?id=' + val.id;
-                } else {
-                    profile_link = 'profile_business.html?id=' + val.id;
-                }
+                // if (val.user_type == 'Shopper') {
+                //     profile_link = 'profile_shopper.html?id=' + val.id;
+                // } else {
+                //     profile_link = 'profile_business.html?id=' + val.id;
+                // }
 
                 html += 
                 '<li class="">'+
@@ -2277,7 +2394,6 @@ function load_new_chat(reciever_id) {
     })
     .done(function(res) {
         console.log("success: "+j2s(res));
-
         if (res.status=='success') {
             $.each(res.data, function(index, val) {
                 var messageType = '';
