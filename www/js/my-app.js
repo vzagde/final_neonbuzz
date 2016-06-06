@@ -52,37 +52,44 @@ var mainView = myApp.addView('.view-main', {});
 
 
 myApp.onPageInit('index', function(page) {
+    myApp.allowPanelOpen = false;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
 });
 
 myApp.onPageInit('login', function(page) {
+    myApp.allowPanelOpen = false;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
 });
 
 myApp.onPageInit('before_register', function(page) {
+    myApp.allowPanelOpen = false;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
 });
 
 myApp.onPageInit('feeds', function(page) {
+    myApp.allowPanelOpen = true;
     bottom_tabs();
     load_feeds();
 });
 
 myApp.onPageInit('buzzs', function(page) {
+    myApp.allowPanelOpen = true;
     bottom_tabs();
     load_buzzs_offers('buzz', '#buzzs-container');
 });
 
 myApp.onPageInit('offers', function(page) {
+    myApp.allowPanelOpen = true;
     bottom_tabs();
     load_buzzs_offers('offer', '#offers-container');
 });
 
 
 myApp.onPageInit('feed', function(page) {
+    myApp.allowPanelOpen = true;
     bottom_tabs();
     var feed_id = page.query.id;
     load_feed(feed_id);
@@ -90,6 +97,7 @@ myApp.onPageInit('feed', function(page) {
 });
 
 myApp.onPageInit('buzz', function(page) {
+    myApp.allowPanelOpen = true;
     bottom_tabs();
     var buzz_id = page.query.id;
     load_buzz_offer('buzz', buzz_id);
@@ -97,6 +105,7 @@ myApp.onPageInit('buzz', function(page) {
 });
 
 myApp.onPageInit('offer', function(page) {
+    myApp.allowPanelOpen = true;
     bottom_tabs();
     var offer_id = page.query.id;
     load_buzz_offer('offer', offer_id);
@@ -104,12 +113,14 @@ myApp.onPageInit('offer', function(page) {
 });
 
 myApp.onPageInit('chats', function(page) {
+    myApp.allowPanelOpen = true;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
     load_chats();
 });
 
 myApp.onPageInit('chat', function(page) {
+    myApp.allowPanelOpen = true;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
     var reciever_id = page.query.id;
@@ -117,12 +128,14 @@ myApp.onPageInit('chat', function(page) {
 });
 
 myApp.onPageInit('notifications', function(page) {
+    myApp.allowPanelOpen = true;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
     load_notification();
 });
 
 myApp.onPageInit('create_feed', function(page) {
+    myApp.allowPanelOpen = true;
     image_from_device = '';
     bottom_tabs();
     $('#create_feed-tags').materialtags('refresh');
@@ -130,6 +143,7 @@ myApp.onPageInit('create_feed', function(page) {
 });
 
 myApp.onPageInit('create_buzz', function(page) {
+    myApp.allowPanelOpen = true;
     image_from_device = '';
     bottom_tabs();
     $('#create_buzz-tags').materialtags('refresh');
@@ -138,6 +152,7 @@ myApp.onPageInit('create_buzz', function(page) {
 });
 
 myApp.onPageInit('create_offer', function(page) {
+    myApp.allowPanelOpen = true;
     image_from_device = '';
     bottom_tabs();
     $('#create_buzz-tags').materialtags('refresh');
@@ -147,6 +162,7 @@ myApp.onPageInit('create_offer', function(page) {
 
 
 myApp.onPageInit('shopper_register', function(page) {
+    myApp.allowPanelOpen = false;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
     image_from_device = '';
@@ -165,12 +181,14 @@ myApp.onPageInit('shopper_register', function(page) {
 });
 
 myApp.onPageInit('edit_profile_shopper', function(page) {
+    myApp.allowPanelOpen = true;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
     load_edit_profile_shopper();
 });
 
 myApp.onPageInit('business_register', function(page) {
+    myApp.allowPanelOpen = false;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
     load_city('#business_register-city_select');
@@ -185,12 +203,14 @@ myApp.onPageInit('business_register', function(page) {
 });
 
 myApp.onPageInit('edit_profile_business', function(page) {
+    myApp.allowPanelOpen = true;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
     load_edit_profile_business();
 });
 
 myApp.onPageInit('profile_shopper', function(page) {
+    myApp.allowPanelOpen = true;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
     image_from_device = '';
@@ -201,6 +221,7 @@ myApp.onPageInit('profile_shopper', function(page) {
 });
 
 myApp.onPageInit('profile_business', function(page) {
+    myApp.allowPanelOpen = true;
     image_from_device = '';
     bottom_tabs();
     var user_id = page.query.id;
@@ -227,6 +248,7 @@ myApp.onPageInit('profile_business', function(page) {
 });
 
 myApp.onPageInit('search', function(page) {
+    myApp.allowPanelOpen = true;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
     load_search();
@@ -234,11 +256,13 @@ myApp.onPageInit('search', function(page) {
 
 
 myApp.onPageInit('forgot_password', function(page) {
+    myApp.allowPanelOpen = false;
     clearInterval(new_comment_interval);
     clearInterval(new_chat_interval);
 });
 
 myApp.onPageInit('people', function(page) {
+    myApp.allowPanelOpen = true;
     console.log('pageInit: ' + j2s(page.query));
 });
 
