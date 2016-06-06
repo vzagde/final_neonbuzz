@@ -623,3 +623,7 @@
     margin: 0;
     padding: 0;
 }
+
+.picker-calendar>.toolbar>.toolbar-inner{
+    background-color: #2196f3 !important;
+}
