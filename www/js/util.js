@@ -847,10 +847,10 @@ function load_buzzs_offers(type, selector) {
         },
     })
     .done(function(res) {
-        console.log('buzzsoffers: ' + j2s(res));
+        // console.log('buzzsoffers: ' + j2s(res));
 
         myApp.hideIndicator();
-        if (res.status = 'success' && res.res_cnt == '') {
+        if (res.status == 'success') {
             var html = '';
             $.each(res.data, function(index, val) {
                 var pofile_image;
@@ -1019,10 +1019,12 @@ function load_feeds() {
         },
     })
     .done(function(res) {
-        console.log('feeds: ' + j2s(res));
+        // console.log('feeds: ' + j2s(res));
 
         myApp.hideIndicator();
-        if (res.status = 'success' && res.res_cnt == '') {
+        console.log("Feeds status"+ res.status);
+        console.log("ENtered console log");
+        if (res.status == 'success') {
             var html = '';
             var type = 'feed';
             $.each(res.data, function(index, val) {
